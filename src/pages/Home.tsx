@@ -1,11 +1,12 @@
 import type { CSSProperties } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Atmosphere } from "../components/Atmosphere";
 import {
   isBirthdaySongMuted,
   setBirthdaySongMuted,
+  stopBirthdaySong,
 } from "../audio/happyBirthday";
 import portraitSrc from "../assets/shravya-home.jpeg";
 
@@ -47,6 +48,12 @@ function Bouquet({ side }: { side: "left" | "right" }) {
 
 export function Home() {
   const [muted, setMuted] = useState(() => isBirthdaySongMuted());
+
+  useEffect(() => {
+    return () => {
+      stopBirthdaySong();
+    };
+  }, []);
 
   const toggleMusic = () => {
     const next = !muted;
