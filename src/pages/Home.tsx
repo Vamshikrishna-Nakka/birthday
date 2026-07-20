@@ -1,7 +1,12 @@
 import type { CSSProperties } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Atmosphere } from "../components/Atmosphere";
+import {
+  isBirthdaySongMuted,
+  setBirthdaySongMuted,
+} from "../audio/happyBirthday";
 import portraitSrc from "../assets/shravya-home.jpeg";
 
 const titleEase = [0.22, 1, 0.36, 1] as const;
@@ -41,8 +46,24 @@ function Bouquet({ side }: { side: "left" | "right" }) {
 }
 
 export function Home() {
+  const [muted, setMuted] = useState(() => isBirthdaySongMuted());
+
+  const toggleMusic = () => {
+    const next = !muted;
+    setMuted(next);
+    setBirthdaySongMuted(next);
+  };
+
   return (
     <section className="home">
+      <button
+        type="button"
+        className="music-toggle"
+        onClick={toggleMusic}
+        aria-label={muted ? "Unmute birthday song" : "Mute birthday song"}
+      >
+        {muted ? "Music off" : "♪ Music"}
+      </button>
       <div className="home-glow" aria-hidden="true" />
       <motion.div
         className="home-bloom"

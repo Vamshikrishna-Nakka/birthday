@@ -302,6 +302,23 @@ img {
   font-weight: 500;
 }
 
+.music-toggle {
+  position: fixed;
+  top: max(0.85rem, env(safe-area-inset-top));
+  right: max(0.85rem, env(safe-area-inset-right));
+  z-index: 50;
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--deep-rose);
+  background: color-mix(in srgb, #fff8f5 88%, transparent);
+  border: 1px solid rgba(196, 92, 122, 0.22);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 20px rgba(92, 36, 56, 0.1);
+}
+
 .wish-title {
   display: flex;
   flex-direction: column;
