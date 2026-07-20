@@ -2,12 +2,12 @@ import { NavLink, useLocation } from "react-router-dom";
 
 const links = [
   { to: "/", label: "Wish" },
-  { to: "/memories", label: "Photos" },
   { to: "/letter", label: "Letter" },
+  { to: "/memories", label: "Photos" },
   { to: "/forever", label: "Married" },
 ];
 
-const darkPages = new Set(["/", "/memories"]);
+const darkPages = new Set(["/memories"]);
 
 export function PageNav() {
   const { pathname } = useLocation();
