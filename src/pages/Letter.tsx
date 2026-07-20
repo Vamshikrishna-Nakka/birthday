@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -710,34 +710,77 @@ const pages: LetterPage[] = [
 
 export function Letter() {
   const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const navigate = useNavigate();
   const page = useMemo(() => pages[index], [index]);
   const total = pages.length;
   const progress = ((index + 1) / total) * 100;
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
-  const goNext = () => {
+  const goPrev = useCallback(() => {
+    if (index === 0) {
+      navigate("/");
+      return;
+    }
+    setDirection(-1);
+    setIndex((v) => Math.max(0, v - 1));
+  }, [index, navigate]);
+
+  const goNext = useCallback(() => {
+    setDirection(1);
     if (index < total - 1) {
       setIndex((v) => v + 1);
       return;
     }
     navigate("/memories");
+  }, [index, navigate, total]);
+
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") goNext();
+      if (event.key === "ArrowLeft") goPrev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [goNext, goPrev]);
+
+  const onTouchStart = (event: TouchEvent) => {
+    touchStartX.current = event.touches[0].clientX;
+    touchStartY.current = event.touches[0].clientY;
+  };
+
+  const onTouchEnd = (event: TouchEvent) => {
+    if (touchStartX.current == null || touchStartY.current == null) return;
+    const dx = event.changedTouches[0].clientX - touchStartX.current;
+    const dy = event.changedTouches[0].clientY - touchStartY.current;
+    touchStartX.current = null;
+    touchStartY.current = null;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
+    if (dx < 0) goNext();
+    else goPrev();
   };
 
   return (
-    <section className="letter-page">
+    <section
+      className="letter-page"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
       <div className="letter-progress" aria-hidden="true">
         <span style={{ width: `${progress}%` }} />
       </div>
 
       <div className="letter-stage">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.article
             key={index}
             className="letter-sheet"
-            initial={{ opacity: 0, y: 22 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            custom={direction}
+            initial={{ opacity: 0, x: direction > 0 ? 56 : -56 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction > 0 ? -40 : 40 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
             <div className="letter-meta">
               <span className="letter-count">
@@ -762,40 +805,32 @@ export function Letter() {
         </AnimatePresence>
       </div>
 
-      <div className="letter-controls">
+      <div className="letter-nav">
         <button
           type="button"
-          disabled={index === 0}
-          onClick={() => setIndex((v) => Math.max(0, v - 1))}
-          aria-label="Previous page"
-          className="letter-arrow"
+          onClick={goPrev}
+          className="letter-nav-btn letter-nav-back"
         >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M15 5L8 12l7 7"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          ← Back
         </button>
-        <button
-          type="button"
-          onClick={goNext}
-          aria-label={page.isFinale ? "See our photos" : "Next page"}
-          className="letter-arrow"
-        >
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path
-              d="M9 5l7 7-7 7"
-              stroke="currentColor"
-              strokeWidth="1.8"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+
+        {page.isFinale ? (
+          <button
+            type="button"
+            onClick={goNext}
+            className="letter-nav-btn letter-nav-next-cta"
+          >
+            Next — Photos →
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={goNext}
+            className="letter-nav-btn letter-nav-forward"
+          >
+            Next →
+          </button>
+        )}
       </div>
     </section>
   );
