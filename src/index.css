@@ -743,10 +743,115 @@ img {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(2.4rem, 9vw, 3.6rem);
+  font-size: clamp(2.2rem, 8vw, 3.4rem);
   color: var(--champagne);
-  margin-bottom: 2rem;
+  margin-bottom: 0.55rem;
   text-align: center;
+}
+
+.surprise-keypad-wrap,
+.surprise-gift-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100%, 22rem);
+}
+
+.surprise-keypad-sub {
+  font-size: 0.9rem;
+  color: rgba(255, 220, 230, 0.65);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.surprise-pin {
+  display: flex;
+  gap: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.surprise-pin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 201, 160, 0.65);
+  background: transparent;
+  transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.surprise-pin-dot.is-filled {
+  background: var(--champagne);
+  border-color: var(--champagne);
+  transform: scale(1.08);
+}
+
+.surprise-pin.is-error .surprise-pin-dot {
+  border-color: #ff8fab;
+  animation: pinShake 0.45s ease;
+}
+
+@keyframes pinShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.surprise-pin-msg {
+  min-height: 1.35rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.82rem;
+  color: rgba(255, 220, 230, 0.55);
+  text-align: center;
+}
+
+.surprise-pin-msg.is-error {
+  color: #ffb3c7;
+}
+
+.surprise-keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  width: min(100%, 17.5rem);
+}
+
+.surprise-key {
+  aspect-ratio: 1.35;
+  display: grid;
+  place-items: center;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 200, 220, 0.22);
+  background: rgba(255, 248, 245, 0.08);
+  color: #fff5f8;
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.surprise-key:active {
+  transform: scale(0.96);
+  background: rgba(255, 248, 245, 0.16);
+}
+
+.surprise-key.is-action {
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: rgba(255, 220, 230, 0.8);
+}
+
+.surprise-gift-wrap .surprise-title {
+  margin-bottom: 2rem;
 }
 
 .surprise-box {

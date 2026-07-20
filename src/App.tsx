@@ -16,7 +16,7 @@ export default function App() {
     () => sessionStorage.getItem(SURPRISE_KEY) === "1",
   );
 
-  const showSurprise = location.pathname === "/" && !opened;
+  const showSurprise = !opened;
 
   const handleOpened = () => {
     sessionStorage.setItem(SURPRISE_KEY, "1");
