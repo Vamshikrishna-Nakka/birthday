@@ -1,207 +1,191 @@
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { Atmosphere } from "../components/Atmosphere";
-import {
-  isBirthdaySongMuted,
-  setBirthdaySongMuted,
-  stopBirthdaySong,
-} from "../audio/happyBirthday";
-import portraitSrc from "../assets/shravya-home.jpeg";
 
 const titleEase = [0.22, 1, 0.36, 1] as const;
 
 const wishWords = ["Happy", "Birthday"];
 
-const loveNotes = [
-  { text: "My forever doctor", delay: 1.55, x: -1 },
-  { text: "You make ordinary days glow", delay: 1.75, x: 1 },
-  { text: "Today is all yours, Bujjulu", delay: 1.95, x: -1 },
+const floatingHearts = [
+  { left: "6%", delay: "0s", dur: "11s", size: "1.1rem" },
+  { left: "14%", delay: "2.2s", dur: "13s", size: "0.85rem" },
+  { left: "28%", delay: "0.8s", dur: "10s", size: "1.25rem" },
+  { left: "42%", delay: "3.1s", dur: "12s", size: "0.9rem" },
+  { left: "58%", delay: "1.4s", dur: "14s", size: "1.15rem" },
+  { left: "72%", delay: "2.7s", dur: "11s", size: "0.8rem" },
+  { left: "84%", delay: "0.4s", dur: "13s", size: "1.05rem" },
+  { left: "92%", delay: "3.8s", dur: "10s", size: "0.95rem" },
+  { left: "20%", delay: "4.5s", dur: "12s", size: "0.75rem" },
+  { left: "66%", delay: "5.2s", dur: "11s", size: "1rem" },
 ];
 
-const petals = [
-  { left: "8%", delay: "0s", dur: "11s", size: "14px", rot: "-20deg" },
-  { left: "22%", delay: "1.8s", dur: "13s", size: "11px", rot: "18deg" },
-  { left: "38%", delay: "0.6s", dur: "10s", size: "16px", rot: "-8deg" },
-  { left: "55%", delay: "2.4s", dur: "12s", size: "12px", rot: "24deg" },
-  { left: "70%", delay: "1.1s", dur: "14s", size: "15px", rot: "-14deg" },
-  { left: "84%", delay: "3s", dur: "11s", size: "10px", rot: "10deg" },
-  { left: "14%", delay: "4s", dur: "12.5s", size: "13px", rot: "6deg" },
-  { left: "92%", delay: "2s", dur: "9.5s", size: "12px", rot: "-22deg" },
+const sparkles = [
+  { left: "12%", top: "18%", delay: "0s" },
+  { left: "78%", top: "22%", delay: "0.8s" },
+  { left: "18%", top: "68%", delay: "1.4s" },
+  { left: "86%", top: "62%", delay: "0.4s" },
+  { left: "48%", top: "12%", delay: "1.1s" },
+  { left: "8%", top: "42%", delay: "1.8s" },
+  { left: "92%", top: "40%", delay: "0.6s" },
 ];
-
-function Bouquet({ side }: { side: "left" | "right" }) {
-  return (
-    <div className={`bouquet bouquet-${side}`} aria-hidden="true">
-      <span className="bouquet-stem" />
-      <span className="bloom bloom-a" />
-      <span className="bloom bloom-b" />
-      <span className="bloom bloom-c" />
-      <span className="bloom bloom-d" />
-      <span className="bloom bloom-e" />
-      <span className="leaf leaf-a" />
-      <span className="leaf leaf-b" />
-    </div>
-  );
-}
 
 export function Home() {
-  const [muted, setMuted] = useState(() => isBirthdaySongMuted());
-
-  useEffect(() => {
-    return () => {
-      stopBirthdaySong();
-    };
-  }, []);
-
-  const toggleMusic = () => {
-    const next = !muted;
-    setMuted(next);
-    setBirthdaySongMuted(next);
-  };
-
   return (
-    <section className="home">
-      <button
-        type="button"
-        className="music-toggle"
-        onClick={toggleMusic}
-        aria-label={muted ? "Unmute birthday song" : "Mute birthday song"}
-      >
-        {muted ? "Music off" : "♪ Music"}
-      </button>
+    <section className="home home-valentine">
       <div className="home-glow" aria-hidden="true" />
+      <div className="home-veil" aria-hidden="true" />
+      <div className="home-sheen" aria-hidden="true" />
+
       <motion.div
         className="home-bloom"
         aria-hidden="true"
         initial={{ opacity: 0, scale: 0.6 }}
-        animate={{ opacity: [0, 0.9, 0.6], scale: [0.6, 1.12, 1] }}
-        transition={{ duration: 1.5, ease: titleEase }}
+        animate={{ opacity: [0, 0.95, 0.7], scale: [0.6, 1.15, 1] }}
+        transition={{ duration: 1.7, ease: titleEase }}
       />
-      <Atmosphere />
+      <div className="home-bloom home-bloom-soft" aria-hidden="true" />
+      <div className="home-orb home-orb-a" aria-hidden="true" />
+      <div className="home-orb home-orb-b" aria-hidden="true" />
 
-      <div className="petal-rain" aria-hidden="true">
-        {petals.map((p, i) => (
+      <div className="home-sparkles" aria-hidden="true">
+        {sparkles.map((s, i) => (
           <span
             key={i}
-            className="petal"
-              style={
-                {
-                  left: p.left,
-                  "--delay": p.delay,
-                  "--dur": p.dur,
-                  "--size": p.size,
-                  "--rot": p.rot,
-                } as CSSProperties
-              }
+            className="home-sparkle-dot"
+            style={
+              {
+                left: s.left,
+                top: s.top,
+                "--delay": s.delay,
+              } as CSSProperties
+            }
           />
         ))}
       </div>
 
-      <div className="home-content">
-        <motion.p
-          className="home-eyebrow"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: titleEase }}
-        >
-          A little world made for you
-        </motion.p>
-
-        <motion.h1 className="wish-title" aria-label="Happy Birthday My Love">
-          <span className="wish-main" aria-hidden="true">
-            {wishWords.map((word, wi) => (
-              <span key={word} className="wish-word">
-                {word.split("").map((letter, li) => (
-                  <motion.span
-                    key={`${word}-${li}`}
-                    className="wish-letter"
-                    initial={{ opacity: 0, y: 28, filter: "blur(6px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{
-                      delay: 0.08 + wi * 0.22 + li * 0.04,
-                      duration: 0.6,
-                      ease: titleEase,
-                    }}
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
-          </span>
-
-          <motion.span
-            className="wish-love"
-            initial={{ opacity: 0, y: 24, scale: 0.88 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.75, duration: 0.8, ease: titleEase }}
+      <div className="home-hearts" aria-hidden="true">
+        {floatingHearts.map((h, i) => (
+          <span
+            key={i}
+            className="home-float-heart"
+            style={
+              {
+                left: h.left,
+                "--delay": h.delay,
+                "--dur": h.dur,
+                "--size": h.size,
+              } as CSSProperties
+            }
           >
-            <span className="wish-love-text">My Love</span>
-            <motion.span
-              className="wish-heart"
-              aria-hidden="true"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: [0, 1.4, 1], opacity: 1 }}
-              transition={{ delay: 1.05, duration: 0.55, ease: titleEase }}
-            >
-              ♥
-            </motion.span>
-          </motion.span>
-        </motion.h1>
+            ♥
+          </span>
+        ))}
+      </div>
 
+      <div className="home-content">
         <motion.div
-          className="home-hero"
-          initial={{ opacity: 0, y: 36, scale: 0.92 }}
+          className="home-card"
+          initial={{ opacity: 0, y: 28, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ delay: 1.05, duration: 0.9, ease: titleEase }}
+          transition={{ duration: 0.85, ease: titleEase }}
         >
-          <Bouquet side="left" />
-          <div className="home-portrait-wrap">
-            <div className="home-portrait-ring" aria-hidden="true" />
-            <img
-              src={portraitSrc}
-              alt="A portrait for my love"
-              className="home-portrait"
-              draggable={false}
-            />
+          <span className="home-ornament home-ornament-tl" aria-hidden="true" />
+          <span className="home-ornament home-ornament-tr" aria-hidden="true" />
+          <span className="home-ornament home-ornament-bl" aria-hidden="true" />
+          <span className="home-ornament home-ornament-br" aria-hidden="true" />
+
+          <motion.p
+            className="home-date"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.55, ease: titleEase }}
+          >
+            With all my heart · 21 July
+          </motion.p>
+
+          <div className="home-divider" aria-hidden="true">
+            <span />
+            <i>♥</i>
+            <span />
           </div>
-          <Bouquet side="right" />
-        </motion.div>
 
-        <motion.p
-          className="home-lead"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.35, duration: 0.65, ease: titleEase }}
-        >
-          To my brilliant doctor — flowers, soft words, and every page that follows.
-        </motion.p>
+          <motion.h1 className="wish-title" aria-label="Happy Birthday Bujjulu">
+            <span className="wish-main" aria-hidden="true">
+              {wishWords.map((word, wi) => (
+                <span key={word} className="wish-word">
+                  {word.split("").map((letter, li) => (
+                    <motion.span
+                      key={`${word}-${li}`}
+                      className="wish-letter"
+                      initial={{ opacity: 0, y: 28, filter: "blur(7px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{
+                        delay: 0.25 + wi * 0.22 + li * 0.04,
+                        duration: 0.65,
+                        ease: titleEase,
+                      }}
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
+                </span>
+              ))}
+            </span>
 
-        <div className="love-notes">
-          {loveNotes.map((note) => (
-            <motion.p
-              key={note.text}
-              className={`love-note ${note.x < 0 ? "is-left" : "is-right"}`}
-              initial={{ opacity: 0, x: note.x * 24, y: 12 }}
-              animate={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ delay: note.delay, duration: 0.65, ease: titleEase }}
+            <motion.span
+              className="wish-name"
+              initial={{ opacity: 0, y: 14, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.95, duration: 0.7, ease: titleEase }}
             >
-              {note.text}
-            </motion.p>
-          ))}
-        </div>
+              <span className="wish-love-halo" aria-hidden="true" />
+              <span className="wish-name-text">Bujjulu</span>
+              <motion.span
+                className="wish-heart"
+                aria-hidden="true"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: [0, 1.4, 1], opacity: 1 }}
+                transition={{ delay: 1.2, duration: 0.5, ease: titleEase }}
+              >
+                ♥
+              </motion.span>
+            </motion.span>
+          </motion.h1>
 
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.1, duration: 0.55, ease: titleEase }}
-        >
-          <Link to="/letter" className="home-next-btn">
-            Your letter awaits
-            <span aria-hidden="true">→</span>
-          </Link>
+          <div className="home-divider" aria-hidden="true">
+            <span />
+            <i>♥</i>
+            <span />
+          </div>
+
+          <motion.blockquote
+            className="home-quote-block"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.35, duration: 0.7, ease: titleEase }}
+          >
+            <span className="home-quote-mark" aria-hidden="true">
+              “
+            </span>
+            <p className="home-quote-text">
+              To my brilliant doctor — today the whole world softens for you.
+              Soft words, quiet love, and a letter written only for your heart.
+            </p>
+            <footer className="home-quote-sign">— Forever yours, Babes</footer>
+          </motion.blockquote>
+
+          <motion.div
+            className="home-cta-wrap"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.85, duration: 0.55, ease: titleEase }}
+          >
+            <Link to="/letter" className="home-next-btn">
+              Open your letter
+              <span aria-hidden="true">→</span>
+            </Link>
+            <p className="home-cta-note">A story written only for you</p>
+          </motion.div>
         </motion.div>
       </div>
     </section>

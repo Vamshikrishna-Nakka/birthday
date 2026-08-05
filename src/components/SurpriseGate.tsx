@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { playBirthdaySong } from "../audio/happyBirthday";
 
 type SurpriseGateProps = {
   onOpened: () => void;
@@ -63,7 +62,6 @@ export function SurpriseGate({ onOpened }: SurpriseGateProps) {
   const handleOpen = () => {
     if (opening) return;
     setOpening(true);
-    void playBirthdaySong(2);
     window.setTimeout(() => setBurst(true), 280);
     window.setTimeout(() => onOpened(), 2100);
   };

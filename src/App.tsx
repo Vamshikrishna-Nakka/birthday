@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { PageTransition } from "./components/Atmosphere";
 import { SurpriseGate } from "./components/SurpriseGate";
 import { Home } from "./pages/Home";
 import { Forever } from "./pages/Forever";
 import { Letter } from "./pages/Letter";
-import { Memories } from "./pages/Memories";
 
 const SURPRISE_KEY = "birthday-surprise-opened";
 
@@ -54,14 +53,7 @@ export default function App() {
                 </PageTransition>
               }
             />
-            <Route
-              path="/memories"
-              element={
-                <PageTransition>
-                  <Memories />
-                </PageTransition>
-              }
-            />
+            <Route path="/memories" element={<Navigate to="/forever" replace />} />
           </Routes>
         )}
       </AnimatePresence>
