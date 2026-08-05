@@ -126,7 +126,6 @@ export function SurpriseGate({ onOpened }: SurpriseGateProps) {
             transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
           >
             <p className="surprise-eyebrow">A little surprise for you</p>
-            <h1 className="surprise-title">Open your gift</h1>
 
             <motion.button
               type="button"
